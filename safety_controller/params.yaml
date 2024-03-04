@@ -1,0 +1,8 @@
+safety_controller:
+  ros__parameters:
+    scan_topic: "/scan"
+    navigation_topic: "/drive"
+    safety_topic: "/safety"
+    side: -1
+    velocity: 1.0
+    desired_distance: 1.
