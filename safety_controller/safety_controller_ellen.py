@@ -7,7 +7,7 @@ from ackermann_msgs.msg import AckermannDriveStamped
 from visualization_msgs.msg import Marker
 
 #TODO: make a separate repository safety_controller 
-
+#test comment
 from wall_follower.visualization_tools import VisualizationTools
 import math
 
