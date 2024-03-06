@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'ellen_safety_controller = safety_controller.safety_controller_ellen:main',
+            'safety_controller = safety_controller.safety_controller_ellen:main',
         ],
     },
 )

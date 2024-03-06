@@ -8,12 +8,14 @@ from visualization_msgs.msg import Marker
 
 #TODO: make a separate repository safety_controller 
 
-from wall_follower.visualization_tools import VisualizationTools
+# from wall_follower.visualization_tools import VisualizationTools
 import math
 
 #how to test
 #run the wall follower sim
 #run the safety controller sim
+
+# scp racecar@192.168.1.85:home/examples.desktop .
 
 class SafetyController:
     def __init__(self):
@@ -73,12 +75,14 @@ class SafetyController:
         If an obstacle is detected, issue a stop command
         '''
         distances, thetas = self.slice_ranges(laser_scan)
+        stop_cmd = AckermannDriveStamped()
         if min(distances) < self.STOP_RANGE:  # Example threshold, adjust as needed
-            stop_cmd = AckermannDriveStamped()
             stop_cmd.drive.speed = 0.0
             stop_cmd.drive.steering_angle = 0.0
-            self.pub_safety.publish(stop_cmd)
-
+        else:
+            stop_cmd.drive.speed = 1.0
+            stop_cmd.drive.steering_angle = 0.0
+        self.pub_safety.publish(stop_cmd)
 
 def main():
     
