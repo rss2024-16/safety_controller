@@ -17,7 +17,7 @@ import math
 
 # scp racecar@192.168.1.85:home/examples.desktop .
 
-class SafetyController:
+class SafetyController(Node):
     def __init__(self):
         '''
         The below section on muxes will help you decide which topic your safety controller 
