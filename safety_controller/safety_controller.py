@@ -8,11 +8,16 @@ from visualization_msgs.msg import Marker
 
 #TODO: make a separate repository safety_controller 
 
-
-from wall_follower.visualization_tools import VisualizationTools
+# from wall_follower.visualization_tools import VisualizationTools
 import math
 
-class SafetyController:
+#how to test
+#run the wall follower sim
+#run the safety controller sim
+
+# scp racecar@192.168.1.85:home/examples.desktop .
+
+class SafetyController(Node):
     def __init__(self):
         '''
         The below section on muxes will help you decide which topic your safety controller 
@@ -26,17 +31,18 @@ class SafetyController:
         self.declare_parameter("scan_topic", "default")
         self.declare_parameter("safety_topic", "default")
         self.declare_parameter("navigation_topic", "default")
+        self.declare_parameter("stop_range", "default")
 
         # Fetch constants from the ROS parameter server
         self.SCAN_TOPIC = self.get_parameter('scan_topic').get_parameter_value().string_value
         self.SAFETY_TOPIC = self.get_parameter('safety_topic').get_parameter_value().string_value
         self.NAVIGATION_TOPIC = self.get_parameter('navigation_topic').get_parameter_value().string_value
+        self.STOP_RANGE = self.get_parameter("stop_range").get_parameter_value().double_value
         
         self.sub_navigation = self.create_subscription(AckermannDriveStamped, self.NAVIGATION_TOPIC, self.navigation_callback, 10)  
         self.sub_scan = self.create_subscription(LaserScan, self.SCAN_TOPIC, self.scan_callback, 10)
         self.pub_safety = self.create_publisher(AckermannDriveStamped, self.SAFETY_TOPIC, 10)
 
-        self.stop_range = 1.0 #meter
 
     def navigation_callback(self, msg: AckermannDriveStamped):
         '''
@@ -68,12 +74,15 @@ class SafetyController:
         Process laser scan data to detect obstacles
         If an obstacle is detected, issue a stop command
         '''
-        if min(laser_scan.ranges) < self.stop_range:  # Example threshold, adjust as needed
-            stop_cmd = AckermannDriveStamped()
+        distances, thetas = self.slice_ranges(laser_scan)
+        stop_cmd = AckermannDriveStamped()
+        if min(distances) < self.STOP_RANGE:  # Example threshold, adjust as needed
             stop_cmd.drive.speed = 0.0
             stop_cmd.drive.steering_angle = 0.0
-            self.pub_safety.publish(stop_cmd)
-
+        else:
+            stop_cmd.drive.speed = 1.0
+            stop_cmd.drive.steering_angle = 0.0
+        self.pub_safety.publish(stop_cmd)
 
 def main():
     
