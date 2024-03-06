@@ -42,6 +42,7 @@ class SafetyController(Node):
         self.sub_navigation = self.create_subscription(AckermannDriveStamped, self.NAVIGATION_TOPIC, self.navigation_callback, 10)
         self.sub_scan = self.create_subscription(LaserScan, self.SCAN_TOPIC, self.scan_callback, 10)
         self.pub_safety = self.create_publisher(AckermannDriveStamped, self.NAVIGATION_TOPIC, 10)
+        self.get_logger().info('HERE "%s"' % self.SAFETY_TOPIC)
 
 
     def navigation_callback(self, msg: AckermannDriveStamped):
@@ -77,11 +78,15 @@ class SafetyController(Node):
         distances, thetas = self.slice_ranges(laser_scan)
         stop_cmd = AckermannDriveStamped()
         if min(distances) < self.STOP_RANGE:  # Example threshold, adjust as needed
-            stop_cmd.drive.speed = 0.0
+            stop_cmd.drive.speed = -3.0
             stop_cmd.drive.steering_angle = 0.0
         else:
             stop_cmd.drive.speed = 1.0
             stop_cmd.drive.steering_angle = 0.0
+        stop_cmd.drive.steering_angle_velocity = 0.0
+        stop_cmd.drive.acceleration = 0.0
+        stop_cmd.drive.jerk = 0.0
+        self.get_logger().info('HELP "%s"' % stop_cmd.drive.speed)
         self.pub_safety.publish(stop_cmd)
 
 def main():
