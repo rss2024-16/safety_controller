@@ -18,7 +18,7 @@ class SafetyController(Node):
         '''
         super().__init__("sc_max")
 
-        SIM = True
+        SIM = False
         if SIM:
             navigation_topic = 'sim_navigation_topic'
             safety_topic = 'sim_safety_topic'
@@ -46,7 +46,7 @@ class SafetyController(Node):
         
         self.stop_distance = 0.4 # m
         self.stopping = False
-        self.VELOCITY = 1.0
+        self.VELOCITY = 3.5
         self.a = None
         self.get_logger().info('HERE "%s"' % self.SAFETY_TOPIC)
 
@@ -97,12 +97,12 @@ class SafetyController(Node):
         return drive_msg
 
     def stop(self):
-        self.VELOCITY += self.a
-        if self.VELOCITY <= 0:
-            self.VELOCITY = 0
+        # self.VELOCITY += self.a
+        # if self.VELOCITY <= 0:
+        #     self.VELOCITY = 0
         
-        self.get_logger().info('stopping "%s"' % self.VELOCITY)
-        drive_cmd = self.make_drive_msg(speed = self.VELOCITY)
+        self.get_logger().info('stopping "%s"' % self.a)
+        drive_cmd = self.make_drive_msg(acceleration=self.a)
         self.pub_safety.publish(drive_cmd)
 
     def scan_callback(self, laser_scan: LaserScan):
