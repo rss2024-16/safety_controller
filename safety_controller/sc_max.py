@@ -120,7 +120,7 @@ class SafetyController(Node):
                     self.stopping = True
                     delta_x = dist_to_obstacle - self.stop_distance
                     self.a = -(self.VELOCITY**2) / (2 * delta_x)
-                    self.timer = self.create_timer(1.0, self.stop) #every second
+                    self.timer = self.create_timer(0.5, self.stop) #every 0.5
                 else: # emergency stop
                     drive_cmd = self.make_drive_msg(speed = 0.0)
             else:
