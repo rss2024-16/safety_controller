@@ -83,7 +83,7 @@ class SafetyController(Node):
             stop_cmd.drive.speed = 0.0
             stop_cmd.drive.steering_angle = 0.0
         else:
-            stop_cmd.drive.speed = 3.0
+            stop_cmd.drive.speed = 5.0
             stop_cmd.drive.steering_angle = 0.0
         stop_cmd.drive.steering_angle_velocity = 0.0
         stop_cmd.drive.acceleration = 0.0
