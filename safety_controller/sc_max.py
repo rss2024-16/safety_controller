@@ -46,7 +46,7 @@ class SafetyController(Node):
         
         self.stop_distance = 0.4 # m
         self.stopping = False
-        self.VELOCITY = 1.0
+        self.VELOCITY = 3.5
         self.a = None
         self.get_logger().info('HERE "%s"' % self.SAFETY_TOPIC)
 
