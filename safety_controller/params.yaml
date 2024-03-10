@@ -3,4 +3,4 @@ safety_controller:
     scan_topic: "/scan"
     navigation_topic: "/drive"
     safety_topic: "/safety"
-    stop_range: 1.0
+    # stop_range: 1.0

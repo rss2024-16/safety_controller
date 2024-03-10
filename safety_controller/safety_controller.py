@@ -37,7 +37,7 @@ class SafetyController(Node):
         self.SCAN_TOPIC = self.get_parameter('scan_topic').get_parameter_value().string_value
         self.SAFETY_TOPIC = self.get_parameter('safety_topic').get_parameter_value().string_value
         self.NAVIGATION_TOPIC = self.get_parameter('navigation_topic').get_parameter_value().string_value
-        self.STOP_RANGE = self.get_parameter("stop_range").get_parameter_value().double_value
+        # self.STOP_RANGE = self.get_parameter("stop_range").get_parameter_value().double_value
 
         self.sub_navigation = self.create_subscription(AckermannDriveStamped, self.NAVIGATION_TOPIC, self.navigation_callback, 10)
         self.sub_scan = self.create_subscription(LaserScan, self.SCAN_TOPIC, self.scan_callback, 10)
@@ -77,12 +77,15 @@ class SafetyController(Node):
         '''
         distances, thetas = self.slice_ranges(laser_scan)
         stop_cmd = AckermannDriveStamped()
-        if min(distances) < self.STOP_RANGE:  # Example threshold, adjust as needed
+        self.STOP_RANGE = ((stop_cmd.drive.speed**2.0)/ (2.0*9.81)) + 1.0
+        if min(distances) < self.STOP_RANGE:
+            # Example threshold, adjust as needed
             stop_cmd.drive.speed = 0.0
             stop_cmd.drive.steering_angle = 0.0
         else:
-            stop_cmd.drive.speed = 1.0
+            stop_cmd.drive.speed = 3.0
             stop_cmd.drive.steering_angle = 0.0
+        self.get_logger().info('stop_range: "%s"' % self.STOP_RANGE)
         stop_cmd.drive.steering_angle_velocity = 0.0
         stop_cmd.drive.acceleration = 0.0
         stop_cmd.drive.jerk = 0.0
