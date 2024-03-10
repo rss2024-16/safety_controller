@@ -31,19 +31,11 @@ class SafetyController(Node):
 
         # Fetch constants from the ROS parameter server
         self.SCAN_TOPIC = self.get_parameter('scan_topic').get_parameter_value().string_value
-<<<<<<< HEAD
-        self.SAFETY_TOPIC = self.get_parameter('safety_topic').get_parameter_value().string_value
-        self.NAVIGATION_TOPIC = self.get_parameter('navigation_topic').get_parameter_value().string_value
-        # self.STOP_RANGE = self.get_parameter("stop_range").get_parameter_value().double_value
-
-        self.sub_navigation = self.create_subscription(AckermannDriveStamped, self.NAVIGATION_TOPIC, self.navigation_callback, 10)
-=======
         self.SAFETY_TOPIC = self.get_parameter('sim_safety_topic').get_parameter_value().string_value
         self.NAVIGATION_TOPIC = self.get_parameter('sim_navigation_topic').get_parameter_value().string_value
         self.STOP_RANGE = self.get_parameter("stop_range").get_parameter_value().double_value
 
         self.sub_navigation = self.create_subscription(AckermannDriveStamped, self.NAVIGATION_TOPIC, self.navigation_callback, 10)
->>>>>>> 683857d0e986a80371fe9b657c3032c74d2e1570
         self.sub_scan = self.create_subscription(LaserScan, self.SCAN_TOPIC, self.scan_callback, 10)
         self.pub_safety = self.create_publisher(AckermannDriveStamped, "drive", 10)
 
