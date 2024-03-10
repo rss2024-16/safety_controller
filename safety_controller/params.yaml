@@ -1,9 +1,6 @@
 safety_controller:
   ros__parameters:
     scan_topic: "/scan"
-    sim_navigation_topic: "/drive"
-    sim_safety_topic: "/drive"
-    stop_range: 1.0
-
-    robot_navigation_topic: "/vesc/high_level/output"
-    robot_safety_topic: "/vesc/low_level/input/safety"
+    navigation_topic: "/drive"
+    safety_topic: "/drive"
+    # stop_range: 1.0

@@ -22,27 +22,19 @@ class SafetyController(Node):
         '''
         super().__init__("sc_max")
 
-        SIM = True
-        if SIM:
-            navigation_topic = 'sim_navigation_topic'
-            safety_topic = 'sim_safety_topic'
-        else:
-            navigation_topic = 'robot_navigation_topic'
-            safety_topic = 'robot_safety_topic'
-
         params = [
             ('scan_topic', 'default'),
             ('stop_range', 'default'),
-            (navigation_topic, 'default'),
-            (safety_topic, 'default')
+            ('navigation_topic', 'default'),
+            ('safety_topic', 'default')
         ]
 
         self.declare_parameters(namespace='', parameters=params)
 
         self.SCAN_TOPIC = self.get_parameter('scan_topic').get_parameter_value().string_value
         self.STOP_RANGE = self.get_parameter("stop_range").get_parameter_value().double_value
-        self.NAVIGATION_TOPIC = self.get_parameter(navigation_topic).get_parameter_value().string_value
-        self.SAFETY_TOPIC = self.get_parameter(safety_topic).get_parameter_value().string_value
+        self.NAVIGATION_TOPIC = self.get_parameter('navigation_topic').get_parameter_value().string_value
+        self.SAFETY_TOPIC = self.get_parameter('safety_topic').get_parameter_value().string_value
 
         self.sub_navigation = self.create_subscription(AckermannDriveStamped, self.NAVIGATION_TOPIC, self.navigation_callback, 10)
         self.sub_scan = self.create_subscription(LaserScan, self.SCAN_TOPIC, self.scan_callback, 10)
