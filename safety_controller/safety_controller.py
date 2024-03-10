@@ -29,14 +29,14 @@ class SafetyController(Node):
 
         # Declare parameters to make them available for use
         self.declare_parameter("scan_topic", "default")
-        self.declare_parameter("safety_topic", "default")
-        self.declare_parameter("navigation_topic", "default")
+        self.declare_parameter("sim_safety_topic", "default")
+        self.declare_parameter("sim_navigation_topic", "default")
         self.declare_parameter("stop_range", "default")
 
         # Fetch constants from the ROS parameter server
         self.SCAN_TOPIC = self.get_parameter('scan_topic').get_parameter_value().string_value
-        self.SAFETY_TOPIC = self.get_parameter('safety_topic').get_parameter_value().string_value
-        self.NAVIGATION_TOPIC = self.get_parameter('navigation_topic').get_parameter_value().string_value
+        self.SAFETY_TOPIC = self.get_parameter('sim_safety_topic').get_parameter_value().string_value
+        self.NAVIGATION_TOPIC = self.get_parameter('sim_navigation_topic').get_parameter_value().string_value
         self.STOP_RANGE = self.get_parameter("stop_range").get_parameter_value().double_value
         
         self.sub_navigation = self.create_subscription(AckermannDriveStamped, "/vesc/high_level/output", self.navigation_callback, 10)  
@@ -83,7 +83,7 @@ class SafetyController(Node):
             stop_cmd.drive.speed = 0.0
             stop_cmd.drive.steering_angle = 0.0
         else:
-            stop_cmd.drive.speed = 3.0
+            stop_cmd.drive.speed = 5.0
             stop_cmd.drive.steering_angle = 0.0
         stop_cmd.drive.steering_angle_velocity = 0.0
         stop_cmd.drive.acceleration = 0.0 # a= -v^2/2(d-d')
