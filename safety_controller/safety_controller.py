@@ -6,16 +6,12 @@ from sensor_msgs.msg import LaserScan
 from ackermann_msgs.msg import AckermannDriveStamped
 from visualization_msgs.msg import Marker
 
-#TODO: make a separate repository safety_controller
-
 # from wall_follower.visualization_tools import VisualizationTools
 import math
 
-#how to test
-#run the wall follower sim
-#run the safety controller sim
-
-# scp racecar@192.168.1.85:home/examples.desktop .
+#how to use
+#Step 1: run the wall follower sim               ros2 launch racecar_simulator simulate.launch.xml
+#Step 2: run the safety controller sim           cd launch, then ros2 launch safety_controller.launch.xml
 
 class SafetyController(Node):
     def __init__(self):
@@ -39,9 +35,9 @@ class SafetyController(Node):
         self.NAVIGATION_TOPIC = self.get_parameter('sim_navigation_topic').get_parameter_value().string_value
         self.STOP_RANGE = self.get_parameter("stop_range").get_parameter_value().double_value
         
-        self.sub_navigation = self.create_subscription(AckermannDriveStamped, "/vesc/high_level/output", self.navigation_callback, 10)  
+        self.sub_navigation = self.create_subscription(AckermannDriveStamped, self.NAVIGATION_TOPIC, self.navigation_callback, 10)  
         self.sub_scan = self.create_subscription(LaserScan, self.SCAN_TOPIC, self.scan_callback, 10)
-        self.pub_safety = self.create_publisher(AckermannDriveStamped, "/vesc/low_level/input/safety", 10)
+        self.pub_safety = self.create_publisher(AckermannDriveStamped, "drive", 10)
 
         self.get_logger().info('HERE "%s"' % self.SAFETY_TOPIC)
 
@@ -53,13 +49,19 @@ class SafetyController(Node):
         '''
         self.pub_safety.publish(msg)
 
+
     def slice_ranges(self, laser_scan: LaserScan):
         '''
         Given an array of ranges (from the laser scan), returns the appropriate slice of data of (distances, thetas)
         Just the front
+
+        TODO: make the slices a function of our stopping distance parameter
+
+        angle_min=-2.3550000190734863, angle_max=2.3550000190734863, angle_increment=0.047575756907463074
+        length = 100
         '''
         ranges = laser_scan.ranges
-        length = len(ranges)
+        length = len(ranges) #100
 
         #laser scans counterclockwise
         #part 1: filter the ranges data to just the front

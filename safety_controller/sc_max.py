@@ -8,6 +8,10 @@ from std_msgs.msg import Header
 
 # from sim import SIM
 
+#how to use
+#Step 1: run the wall follower sim               ros2 launch racecar_simulator simulate.launch.xml
+#Step 2: run the safety controller sim           cd launch, then ros2 launch sc.launch.xml
+
 class SafetyController(Node):
     def __init__(self):
         '''
@@ -18,7 +22,7 @@ class SafetyController(Node):
         '''
         super().__init__("sc_max")
 
-        SIM = False
+        SIM = True
         if SIM:
             navigation_topic = 'sim_navigation_topic'
             safety_topic = 'sim_safety_topic'
@@ -97,6 +101,9 @@ class SafetyController(Node):
         return drive_msg
 
     def stop(self):
+        '''
+        Slows down the car and publishes that command
+        '''
         # self.VELOCITY += self.a
         # if self.VELOCITY <= 0:
         #     self.VELOCITY = 0
@@ -119,16 +126,17 @@ class SafetyController(Node):
                 if dist_to_obstacle > self.stop_distance:
                     self.stopping = True
                     delta_x = dist_to_obstacle - self.stop_distance
-                    self.a = -(self.VELOCITY**2) / (2 * delta_x)
-                    self.timer = self.create_timer(0.5, self.stop) #every 0.5
+                    self.a = -(self.VELOCITY**2) / (2 * delta_x) #need to replace with the navigation speed
+                    self.timer = self.create_timer(0.05, self.stop) #every 0.5
                 else: # emergency stop
                     drive_cmd = self.make_drive_msg(speed = 0.0)
-            else:
+            else: #just move forward
                 drive_cmd = self.make_drive_msg(speed = self.VELOCITY)
 
             if not self.stopping:
                 self.get_logger().info('publishing "%s"' % drive_cmd.drive.speed)
                 self.pub_safety.publish(drive_cmd)
+        
 
 def main():
 

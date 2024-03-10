@@ -1,0 +1,6 @@
+<launch>
+  <!-- Launch the safety controller with parameters -->
+  <node pkg="safety_controller" name="sc_max" exec="sc_max" output="screen">
+    <param from="$(find-pkg-share safety_controller)/params2.yaml"/>
+  </node>
+</launch>

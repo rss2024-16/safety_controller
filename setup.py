@@ -11,7 +11,7 @@ setup(
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
-        ('share/' + package_name, ['package.xml', "safety_controller/params.yaml"]),
+        ('share/' + package_name, ['package.xml', "safety_controller/params.yaml", "safety_controller/params2.yaml"]),
         (os.path.join('share', package_name), glob('launch/*launch.xml'))
     ],
     install_requires=['setuptools'],

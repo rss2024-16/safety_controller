@@ -1,4 +1,4 @@
-safety_controller:
+sc_max:
   ros__parameters:
     scan_topic: "/scan"
     sim_navigation_topic: "/drive"
