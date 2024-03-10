@@ -41,7 +41,7 @@ class SafetyController(Node):
 
         self.get_logger().info('HERE "%s"' % self.SAFETY_TOPIC)
 
-        self.VELOCITY = 3.0
+        self.VELOCITY = 2.0
 
 
     def navigation_callback(self, msg: AckermannDriveStamped):
