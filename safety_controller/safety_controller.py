@@ -82,10 +82,11 @@ class SafetyController(Node):
         '''
         distances, thetas = self.slice_ranges(laser_scan)
         stop_cmd = AckermannDriveStamped()
-        self.STOP_RANGE = 0.025*self.VELOCITY + .175 + 0.5
+        # self.STOP_RANGE = 0.025*self.VELOCITY + .175 + 0.5
+        offset = 0.5
+        self.STOP_RANGE = self.VELOCITY**2/40 + offset
         if min(distances) < self.STOP_RANGE:
             # Example threshold, adjust as needed
-            stop_cmd.drive.speed = 0.0
             stop_cmd.drive.speed = 0.0
             stop_cmd.drive.steering_angle = 0.0
         else:
