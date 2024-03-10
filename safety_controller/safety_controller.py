@@ -37,7 +37,7 @@ class SafetyController(Node):
 
         self.sub_navigation = self.create_subscription(AckermannDriveStamped, self.NAVIGATION_TOPIC, self.navigation_callback, 10)
         self.sub_scan = self.create_subscription(LaserScan, self.SCAN_TOPIC, self.scan_callback, 10)
-        self.pub_safety = self.create_publisher(AckermannDriveStamped, "drive", 10)
+        self.pub_safety = self.create_publisher(AckermannDriveStamped, self.SAFETY_TOPIC, 10)
 
         self.get_logger().info('HERE "%s"' % self.SAFETY_TOPIC)
 
