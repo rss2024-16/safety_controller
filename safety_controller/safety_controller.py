@@ -42,6 +42,7 @@ class SafetyController(Node):
         self.get_logger().info('HERE "%s"' % self.SAFETY_TOPIC)
 
         self.VELOCITY = 2.0
+        self.STOP_RANGE = 1.0
 
 
     def navigation_callback(self, msg: AckermannDriveStamped):
@@ -84,7 +85,7 @@ class SafetyController(Node):
         stop_cmd = AckermannDriveStamped()
         # self.STOP_RANGE = 0.025*self.VELOCITY + .175 + 0.5
         offset = 0.15
-        self.STOP_RANGE = self.VELOCITY**2/60 + offset
+        # self.STOP_RANGE = self.VELOCITY**2/60 + offset
         if min(distances) < self.STOP_RANGE:
             # Example threshold, adjust as needed
             stop_cmd.drive.speed = 0.0
