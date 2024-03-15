@@ -41,8 +41,8 @@ class SafetyController(Node):
 
         self.get_logger().info('HERE "%s"' % self.SAFETY_TOPIC)
 
-        self.VELOCITY = 2.0
-        self.STOP_RANGE = 1.0
+        self.VELOCITY = 3.0
+        # self.STOP_RANGE = 1.0
 
 
     def navigation_callback(self, msg: AckermannDriveStamped):
@@ -84,8 +84,6 @@ class SafetyController(Node):
         distances, thetas = self.slice_ranges(laser_scan)
         stop_cmd = AckermannDriveStamped()
         # self.STOP_RANGE = 0.025*self.VELOCITY + .175 + 0.5
-
-        #THIS 
         offset = 0.5
         self.STOP_RANGE = self.VELOCITY**2/45 + offset
         if min(distances) < self.STOP_RANGE:
